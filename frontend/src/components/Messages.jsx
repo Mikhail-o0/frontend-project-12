@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useGetMessagesQuery, useAddMessageMutation } from '../api/messagesApi'
 import useSocket from '../hooks/useSocket'
@@ -13,20 +14,29 @@ const Messages = ({ channelId, channelName }) => {
   const [newMessage, setNewMessage] = useState('')
   const [localMessages, setLocalMessages] = useState([])
   const messagesEndRef = useRef(null)
+  
+  const currentUser = useSelector((state) => state.auth.user)
 
   useEffect(() => {
     if (messages) {
-      const filtered = messages.filter(msg => msg.channelId === channelId)
+      const filtered = messages.map(msg => ({
+        ...msg,
+        username: msg.username || msg.author || currentUser || 'Unknown'
+      })).filter(msg => msg.channelId === channelId)
       setLocalMessages(filtered)
     }
-  }, [messages, channelId])
+  }, [messages, channelId, currentUser])
 
   useEffect(() => {
     if (!socket) return
 
     const handleNewMessage = (message) => {
       if (message.channelId === channelId) {
-        setLocalMessages((prev) => [...prev, message])
+        const msgWithUsername = {
+          ...message,
+          username: message.username || message.author || currentUser || 'Unknown'
+        }
+        setLocalMessages((prev) => [...prev, msgWithUsername])
       }
     }
 
@@ -35,7 +45,7 @@ const Messages = ({ channelId, channelName }) => {
     return () => {
       socket.off('newMessage', handleNewMessage)
     }
-  }, [socket, channelId])
+  }, [socket, channelId, currentUser])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -84,7 +94,12 @@ const Messages = ({ channelId, channelName }) => {
   return (
     <div className="d-flex flex-column h-100">
       <div className="p-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 className="m-0"># {channelName}</h5>
+        <div>
+          <h5 className="m-0"># {channelName}</h5>
+          <small className="text-muted">
+            {localMessages.length} {t('chat.messages.count', { count: localMessages.length })}
+          </small>
+        </div>
         <span className={`badge ${isConnected ? 'bg-success' : 'bg-danger'}`}>
           {isConnected ? t('chat.messages.connected') : t('chat.messages.disconnected')}
         </span>
@@ -98,13 +113,9 @@ const Messages = ({ channelId, channelName }) => {
             {localMessages.map((message) => (
               <div key={message.id} className="card">
                 <div className="card-body p-2">
-                  <div className="d-flex justify-content-between">
-                    <strong>{message.username}</strong>
-                    <small className="text-muted">
-                      {new Date(message.createdAt).toLocaleTimeString()}
-                    </small>
-                  </div>
-                  <p className="m-0 mt-1 text-break">{message.body}</p>
+                  <p className="m-0 text-break">
+                    <strong>{message.username}:</strong> {message.body}
+                  </p>
                 </div>
               </div>
             ))}
