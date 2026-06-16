@@ -39,6 +39,8 @@ const Signup = () => {
         token: response.token, 
         username: response.username 
       }))
+      
+      await new Promise(resolve => setTimeout(resolve, 100))
       navigate('/')
     } catch (err) {
       if (err.status === 409) {
