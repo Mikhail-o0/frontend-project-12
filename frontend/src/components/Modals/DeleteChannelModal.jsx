@@ -25,7 +25,6 @@ const DeleteChannelModal = ({ show, onClose, channelId, channelName }) => {
       </Modal.Header>
       <Modal.Body>
         <p>{t('modals.delete.confirm')}</p>
-        
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={isLoading}>
