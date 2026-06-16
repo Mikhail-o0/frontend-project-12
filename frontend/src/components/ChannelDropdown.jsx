@@ -43,17 +43,6 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
         >
           <button
             type="button"
-            className="dropdown-item"
-            onClick={(e) => {
-              e.stopPropagation()
-              onRename(channel)
-              setShow(false)
-            }}
-          >
-            {t('dropdown.rename')}
-          </button>
-          <button
-            type="button"
             className="dropdown-item text-danger"
             onClick={(e) => {
               e.stopPropagation()
@@ -62,6 +51,17 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
             }}
           >
             {t('dropdown.delete')}
+          </button>
+          <button
+            type="button"
+            className="dropdown-item"
+            onClick={(e) => {
+              e.stopPropagation()
+              onRename(channel)
+              setShow(false)
+            }}
+          >
+            {t('dropdown.rename')}
           </button>
         </div>
       )}
