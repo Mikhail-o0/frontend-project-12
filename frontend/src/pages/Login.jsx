@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useLoginMutation } from '../api/authApi'
@@ -21,9 +21,7 @@ const Login = () => {
         token: response.token, 
         username: values.username 
       }))
-      
-      // Принудительная перезагрузка страницы
-      window.location.href = '/'
+      navigate('/')
     } catch (err) {
       if (err.status === 401) {
         setErrorMessage(t('login.errors.invalidCredentials'))
@@ -31,7 +29,7 @@ const Login = () => {
         setErrorMessage(t('login.errors.connection'))
       }
     } finally {
-        setSubmitting(false)
+      setSubmitting(false)
     }
   }
 
@@ -91,9 +89,7 @@ const Login = () => {
 
               <div className="text-center">
                 <span className="text-muted">{t('login.noAccount')} </span>
-                <a href="/signup" className="text-decoration-none">
-                  {t('login.signupLink')}
-                </a>
+                <Link to="/signup">{t('login.signupLink')}</Link>
               </div>
             </Form>
           )}

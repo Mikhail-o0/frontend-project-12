@@ -119,6 +119,7 @@ const Messages = ({ channelId, channelName }) => {
             type="text"
             className="form-control"
             placeholder={t('chat.messages.placeholder')}
+            aria-label="Новое сообщение"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             disabled={!isConnected || isAdding}
