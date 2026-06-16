@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { io } from 'socket.io-client'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 
 const useSocket = () => {
+  const { t } = useTranslation()
   const [socket, setSocket] = useState(null)
   const [isConnected, setIsConnected] = useState(false)
 
@@ -24,11 +27,13 @@ const useSocket = () => {
     socketInstance.on('disconnect', () => {
       console.log('WebSocket отключен')
       setIsConnected(false)
+      toast.error(t('toasts.error.networkError'))
     })
 
     socketInstance.on('connect_error', (error) => {
       console.error('Ошибка подключения WebSocket:', error)
       setIsConnected(false)
+      toast.error(t('toasts.error.networkError'))
     })
 
     setSocket(socketInstance)

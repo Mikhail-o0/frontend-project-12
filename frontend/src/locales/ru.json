@@ -103,5 +103,20 @@
   "loading": {
     "channels": "Загрузка каналов...",
     "channelsError": "Ошибка загрузки каналов"
+  },
+  "toasts": {
+    "success": {
+      "channelCreated": "Канал создан",
+      "channelRenamed": "Канал переименован",
+      "channelDeleted": "Канал удалён"
+    },
+    "error": {
+      "networkError": "Ошибка соединения с сервером",
+      "loadingError": "Ошибка загрузки данных",
+      "messageSendError": "Не удалось отправить сообщение",
+      "channelCreateError": "Не удалось создать канал",
+      "channelRenameError": "Не удалось переименовать канал",
+      "channelDeleteError": "Не удалось удалить канал"
+    }
   }
 }

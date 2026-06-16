@@ -1,5 +1,6 @@
 import { Modal, Button } from 'react-bootstrap'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { useDeleteChannelMutation } from '../../api/channelsApi'
 
 const DeleteChannelModal = ({ show, onClose, channelId, channelName }) => {
@@ -10,9 +11,10 @@ const DeleteChannelModal = ({ show, onClose, channelId, channelName }) => {
     try {
       await deleteChannel(channelId).unwrap()
       onClose()
+      toast.success(t('toasts.success.channelDeleted'))
     } catch (err) {
       console.error('Ошибка удаления канала:', err)
-      alert(t('modals.delete.error'))
+      toast.error(t('toasts.error.channelDeleteError'))
     }
   }
 

@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import ChannelDropdown from './ChannelDropdown'
 
 const Channels = ({ 
@@ -7,9 +9,16 @@ const Channels = ({
   onSelectChannel, 
   onAddChannel,
   onRenameChannel,
-  onDeleteChannel
+  onDeleteChannel,
+  error
 }) => {
   const { t } = useTranslation()
+
+  useEffect(() => {
+    if (error) {
+      toast.error(t('toasts.error.loadingError'))
+    }
+  }, [error, t])
 
   if (!channels) {
     return <div className="p-3">{t('loading.channels')}</div>

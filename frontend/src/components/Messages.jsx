@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { useGetMessagesQuery, useAddMessageMutation } from '../api/messagesApi'
 import useSocket from '../hooks/useSocket'
 
@@ -54,7 +55,7 @@ const Messages = ({ channelId, channelName }) => {
       await addMessage(messageData).unwrap()
     } catch (err) {
       console.error('Ошибка отправки сообщения:', err)
-      alert(t('chat.messages.sendError'))
+      toast.error(t('toasts.error.messageSendError'))
     }
   }
 

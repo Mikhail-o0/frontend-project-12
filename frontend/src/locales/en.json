@@ -103,5 +103,20 @@
   "loading": {
     "channels": "Loading channels...",
     "channelsError": "Error loading channels"
+  },
+  "toasts": {
+    "success": {
+      "channelCreated": "Channel created",
+      "channelRenamed": "Channel renamed",
+      "channelDeleted": "Channel deleted"
+    },
+    "error": {
+      "networkError": "Connection error",
+      "loadingError": "Data loading error",
+      "messageSendError": "Failed to send message",
+      "channelCreateError": "Failed to create channel",
+      "channelRenameError": "Failed to rename channel",
+      "channelDeleteError": "Failed to delete channel"
+    }
   }
 }

@@ -3,6 +3,7 @@ import { Formik, Field } from 'formik'
 import * as yup from 'yup'
 import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { useRenameChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
 
 const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
@@ -38,9 +39,11 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
       await renameChannel({ id: channelId, name: values.name }).unwrap()
       resetForm()
       onClose()
+      toast.success(t('toasts.success.channelRenamed'))
     } catch (err) {
       console.error('Ошибка переименования:', err)
       setFieldError('name', t('modals.rename.errors.rename'))
+      toast.error(t('toasts.error.channelRenameError'))
     } finally {
       setSubmitting(false)
     }

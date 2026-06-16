@@ -3,6 +3,7 @@ import { Formik, Field } from 'formik'
 import * as yup from 'yup'
 import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'react-toastify'
 import { useAddChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
 
 const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
@@ -39,9 +40,11 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
       resetForm()
       onSelectChannel(newChannel.id)
       onClose()
+      toast.success(t('toasts.success.channelCreated'))
     } catch (err) {
       console.error('Ошибка создания канала:', err)
       setFieldError('name', t('modals.add.errors.create'))
+      toast.error(t('toasts.error.channelCreateError'))
     } finally {
       setSubmitting(false)
     }

@@ -9,7 +9,7 @@ import DeleteChannelModal from '../components/Modals/DeleteChannelModal'
 
 const Chat = () => {
   const { t } = useTranslation()
-  const { data: channels } = useGetChannelsQuery()
+  const { data: channels, error } = useGetChannelsQuery()
   const [activeChannelId, setActiveChannelId] = useState(null)
   
   const [showAddModal, setShowAddModal] = useState(false)
@@ -59,6 +59,7 @@ const Chat = () => {
             onAddChannel={() => setShowAddModal(true)}
             onRenameChannel={handleRenameChannel}
             onDeleteChannel={handleDeleteChannel}
+            error={error}
           />
         </div>
         <div className="col-md-9 col-lg-10 p-0">
