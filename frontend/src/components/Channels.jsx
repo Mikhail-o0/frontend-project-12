@@ -47,8 +47,7 @@ const Channels = ({
             >
               # {channel.name}
             </button>
-            {/* Рендерим dropdown для всех каналов кроме general */}
-            {channel.name !== 'general' && (
+            {!['general', 'random'].includes(channel.name) && (
               <ChannelDropdown
                 channel={channel}
                 onRename={onRenameChannel}

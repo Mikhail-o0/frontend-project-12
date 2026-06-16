@@ -48,9 +48,10 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
         type="button"
         className="btn btn-sm btn-outline-secondary"
         onClick={handleToggle}
-        title={t('dropdown.ariaLabel')}
+        aria-label={t('dropdown.ariaLabel')}
       >
-        {t('dropdown.ariaLabel')}
+        <span className="visually-hidden">{t('dropdown.ariaLabel')}</span>
+        <span aria-hidden="true">⋮</span>
       </button>
       
       {show && (

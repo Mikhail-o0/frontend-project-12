@@ -1,6 +1,6 @@
 import { Modal, Form, Button } from 'react-bootstrap'
 import { Formik, Form as FormikForm, Field } from 'formik'
-import { useRef, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useRenameChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
@@ -10,15 +10,15 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const { t } = useTranslation()
   const [renameChannel, { isLoading }] = useRenameChannelMutation()
   const { data: channels } = useGetChannelsQuery()
-  const inputRef = useRef(null)
 
+  // Выделяем весь текст при открытии модалки
   useEffect(() => {
-    if (show && inputRef.current) {
-      // Небольшая задержка для корректного фокуса
+    if (show) {
       const timer = setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus()
-          inputRef.current.select() // Выделяем весь текст
+        const input = document.getElementById('rename-channel-input')
+        if (input) {
+          input.focus()
+          input.select()
         }
       }, 100)
       return () => clearTimeout(timer)
@@ -79,7 +79,6 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
                   id="rename-channel-input"
                   name="name"
                   placeholder={t('modals.rename.placeholder')}
-                  innerRef={inputRef}
                   isInvalid={!!errors.name}
                   disabled={isLoading || isSubmitting}
                 />

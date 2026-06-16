@@ -24,7 +24,6 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   }, [show])
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
-    // Цензурируем нецензурную лексику вместо блокировки
     let name = censorText(values.name.trim())
     console.log('Original name:', values.name)
   console.log('Censored name:', name)

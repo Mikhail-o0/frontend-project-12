@@ -51,8 +51,6 @@ const Signup = () => {
     }
   }
 
-// ... остальной код без изменений
-
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
       <div className="card p-4" style={{ width: '400px' }}>
