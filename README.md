@@ -97,16 +97,6 @@
 
 ---
 
-## 🌐 Демо
-
-🔗 **Live Demo:** [https://frontend-project-12-xxxx.onrender.com](https://frontend-project-12-xxxx.onrender.com)
-
-**Тестовый аккаунт:**
-- Логин: `admin`
-- Пароль: `admin`
-
----
-
 ## 🚀 Установка и запуск
 
 ### Требования
