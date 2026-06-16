@@ -24,6 +24,7 @@ createRoot(document.getElementById('root')).render(
         draggable
         pauseOnHover
         theme="light"
+        limit={3}
       />
     </Provider>
   </StrictMode>,

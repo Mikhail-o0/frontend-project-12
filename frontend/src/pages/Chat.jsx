@@ -1,15 +1,6 @@
-import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useGetChannelsQuery } from '../api/channelsApi'
-import Channels from '../components/Channels'
-import Messages from '../components/Messages'
-import AddChannelModal from '../components/Modals/AddChannelModal'
-import RenameChannelModal from '../components/Modals/RenameChannelModal'
-import DeleteChannelModal from '../components/Modals/DeleteChannelModal'
-
 const Chat = () => {
   const { t } = useTranslation()
-  const { data: channels, error } = useGetChannelsQuery()
+  const { data: channels, error: channelsError } = useGetChannelsQuery()
   const [activeChannelId, setActiveChannelId] = useState(null)
   
   const [showAddModal, setShowAddModal] = useState(false)
@@ -59,7 +50,7 @@ const Chat = () => {
             onAddChannel={() => setShowAddModal(true)}
             onRenameChannel={handleRenameChannel}
             onDeleteChannel={handleDeleteChannel}
-            error={error}
+            error={channelsError}
           />
         </div>
         <div className="col-md-9 col-lg-10 p-0">
@@ -98,5 +89,3 @@ const Chat = () => {
     </div>
   )
 }
-
-export default Chat
