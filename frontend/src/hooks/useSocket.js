@@ -12,7 +12,6 @@ const useSocket = () => {
     const token = localStorage.getItem('token')
     
     if (!token) {
-      console.log('No token, skipping WebSocket connection')
       return
     }
 
@@ -20,53 +19,40 @@ const useSocket = () => {
     const socketUrl = isDevelopment 
       ? 'http://localhost:5001'
       : window.location.origin
-    
+
     console.log('Connecting to WebSocket:', socketUrl)
 
-    try {
-      const socketInstance = io(socketUrl, {
-        auth: {
-          token: `Bearer ${token}`,
-        },
-        transports: ['websocket', 'polling'],
-        reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
-        timeout: 10000,
-      })
+    const socketInstance = io(socketUrl, {
+      auth: {
+        token: `Bearer ${token}`,
+      },
+      transports: ['websocket'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
+      timeout: 10000,
+    })
 
-      socketInstance.on('connect', () => {
-        console.log('WebSocket connected')
-        setIsConnected(true)
-      })
+    socketInstance.on('connect', () => {
+      console.log('WebSocket connected')
+      setIsConnected(true)
+    })
 
-      socketInstance.on('disconnect', () => {
-        console.log('WebSocket disconnected')
-        setIsConnected(false)
-      })
-
-      socketInstance.on('connect_error', (error) => {
-        console.error('WebSocket connection error:', error.message)
-        setIsConnected(false)
-   
-        if (!socketInstance.recovered) {
-          toast.error(t('toasts.error.networkError'))
-        }
-      })
-
-      socketInstance.on('error', (error) => {
-        console.error('WebSocket error:', error)
-      })
-
-      setSocket(socketInstance)
-
-      return () => {
-        console.log('Cleaning up WebSocket connection')
-        socketInstance.disconnect()
-      }
-    } catch (error) {
-      console.error('Failed to initialize WebSocket:', error)
+    socketInstance.on('disconnect', () => {
+      console.log('WebSocket disconnected')
       setIsConnected(false)
+    })
+
+    socketInstance.on('connect_error', (error) => {
+      console.error('WebSocket error:', error.message)
+      setIsConnected(false)
+    })
+
+    setSocket(socketInstance)
+
+    return () => {
+      socketInstance.removeAllListeners()
+      socketInstance.disconnect()
     }
   }, [t])
 
