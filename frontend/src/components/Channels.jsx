@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
 import ChannelDropdown from './ChannelDropdown'
 
 const Channels = ({ 
@@ -14,12 +12,6 @@ const Channels = ({
 }) => {
   const { t } = useTranslation()
 
-  useEffect(() => {
-    if (error) {
-      toast.error(t('toasts.error.loadingError'))
-    }
-  }, [error, t])
-
   if (!channels) {
     return <div className="p-3">{t('loading.channels')}</div>
   }
@@ -29,6 +21,7 @@ const Channels = ({
       <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
         <h5 className="m-0">{t('chat.channels.title')}</h5>
         <button 
+          type="button"
           className="btn btn-sm btn-outline-primary"
           onClick={onAddChannel}
           aria-label={t('chat.channels.add')}
@@ -43,12 +36,17 @@ const Channels = ({
             className={`list-group-item d-flex justify-content-between align-items-center ${
               activeChannelId === channel.id ? 'active' : ''
             }`}
-            onClick={() => onSelectChannel(channel.id)}
             style={{ cursor: 'pointer' }}
           >
-            <span className="text-truncate flex-grow-1">
+            <button
+              type="button"
+              className="btn btn-link text-decoration-none text-start flex-grow-1 text-truncate p-0 border-0"
+              onClick={() => onSelectChannel(channel.id)}
+              aria-label={channel.name}
+              style={{ color: activeChannelId === channel.id ? 'white' : 'inherit' }}
+            >
               # {channel.name}
-            </span>
+            </button>
             {channel.removable && (
               <ChannelDropdown
                 channel={channel}
