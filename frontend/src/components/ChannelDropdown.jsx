@@ -14,10 +14,10 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
     }
 
     if (show) {
-      // Добавляем listener с задержкой, чтобы dropdown не закрывался сразу
+      // Увеличиваем задержку до 100ms для надёжности
       const timer = setTimeout(() => {
         document.addEventListener('mousedown', handleClickOutside)
-      }, 0)
+      }, 100)
       
       return () => {
         clearTimeout(timer)
@@ -53,6 +53,7 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
         className="btn btn-sm btn-outline-secondary"
         onClick={handleToggle}
         aria-label={t('dropdown.ariaLabel')}
+        title={t('dropdown.ariaLabel')}
       >
         ⋮
       </button>
