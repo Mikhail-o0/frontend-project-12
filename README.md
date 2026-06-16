@@ -5,15 +5,8 @@
 
 # 🚀 Hexlet Chat
 
-[![Hexlet Chat](https://github.com/Mikhail-o0/frontend-project-12/actions/workflows/main.yml/badge.svg)](https://github.com/Mikhail-o0/frontend-project-12/actions)
-[![Deploy to Render](https://img.shields.io/badge/deploy-render-purple)](https://frontend-project-12-xxxx.onrender.com)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
-[![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://reactjs.org/)
-
 > Полнофункциональный чат в стиле Slack с поддержкой real-time сообщений, каналов и авторизации.
 
-![Chat Preview](https://github.com/Mikhail-o0/frontend-project-12/raw/main/docs/preview.png)
 
 ---
 

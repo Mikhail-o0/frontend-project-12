@@ -1,3 +1,12 @@
+import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'  // <-- Добавьте эту строку
+import { useGetChannelsQuery } from '../api/channelsApi'
+import Channels from '../components/Channels'
+import Messages from '../components/Messages'
+import AddChannelModal from '../components/Modals/AddChannelModal'
+import RenameChannelModal from '../components/Modals/RenameChannelModal'
+import DeleteChannelModal from '../components/Modals/DeleteChannelModal'
+
 const Chat = () => {
   const { t } = useTranslation()
   const { data: channels, error: channelsError } = useGetChannelsQuery()
@@ -89,3 +98,4 @@ const Chat = () => {
     </div>
   )
 }
+export default Chat
