@@ -58,7 +58,7 @@
     "add": {
       "title": "Добавить канал",
       "placeholder": "Имя канала",
-      "cancel": "Отмена",
+      "cancel": "Отменить",
       "submit": "Отправить",
       "submitting": "Отправить",
       "errors": {
