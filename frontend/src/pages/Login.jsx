@@ -1,5 +1,5 @@
 import { Formik, Form, Field } from 'formik'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useLoginMutation } from '../api/authApi'
@@ -14,26 +14,24 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (values, { setSubmitting }) => {
-  try {
-    setErrorMessage('')
-    const response = await login(values).unwrap()
-    dispatch(setCredentials({ 
-      token: response.token, 
-      username: values.username 
-    }))
-    
-    await new Promise(resolve => setTimeout(resolve, 100))
-    navigate('/')
-  } catch (err) {
-    if (err.status === 401) {
-      setErrorMessage(t('login.errors.invalidCredentials'))
-    } else {
-      setErrorMessage(t('login.errors.connection'))
+    try {
+      setErrorMessage('')
+      const response = await login(values).unwrap()
+      dispatch(setCredentials({ 
+        token: response.token, 
+        username: values.username 
+      }))
+      navigate('/')
+    } catch (err) {
+      if (err.status === 401) {
+        setErrorMessage(t('login.errors.invalidCredentials'))
+      } else {
+        setErrorMessage(t('login.errors.connection'))
+      }
+    } finally {
+      setSubmitting(false)
     }
-  } finally {
-    setSubmitting(false)
   }
-}
 
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
@@ -91,7 +89,9 @@ const Login = () => {
 
               <div className="text-center">
                 <span className="text-muted">{t('login.noAccount')} </span>
-                <Link to="/signup">{t('login.signupLink')}</Link>
+                <a href="/signup" className="text-decoration-none">
+                  {t('login.signupLink')}
+                </a>
               </div>
             </Form>
           )}
