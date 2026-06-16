@@ -2,16 +2,33 @@ import { Formik, Form, Field } from 'formik'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { useLoginMutation } from '../api/authApi'
+import { useSignupMutation } from '../api/authApi'
 import { setCredentials } from '../slices/authSlice'
 import { useState } from 'react'
+import * as yup from 'yup'
 
-const Login = () => {
+const Signup = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [login, { isLoading }] = useLoginMutation()
+  const [signup, { isLoading }] = useSignupMutation()
   const [errorMessage, setErrorMessage] = useState('')
+
+  const getValidationSchema = () => yup.object().shape({
+    username: yup
+      .string()
+      .required(t('signup.errors.required'))
+      .min(3, t('signup.errors.usernameLength'))
+      .max(20, t('signup.errors.usernameLength')),
+    password: yup
+      .string()
+      .required(t('signup.errors.required'))
+      .min(6, t('signup.errors.passwordLength')),
+    confirmPassword: yup
+      .string()
+      .required(t('signup.errors.required'))
+      .oneOf([yup.ref('password'), null], t('signup.errors.passwordMismatch')),
+  })
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
@@ -22,9 +39,7 @@ const Login = () => {
         token: response.token, 
         username: response.username 
       }))
-      
-      // Принудительная перезагрузка страницы
-      window.location.href = '/'
+      navigate('/')
     } catch (err) {
       if (err.status === 409) {
         setFieldError('username', t('signup.errors.userExists'))
@@ -39,12 +54,13 @@ const Login = () => {
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
       <div className="card p-4" style={{ width: '400px' }}>
-        <h2 className="text-center mb-4">{t('login.pageName')}</h2>
+        <h2 className="text-center mb-4">{t('signup.pageName')}</h2>
         <Formik
-          initialValues={{ username: '', password: '' }}
+          initialValues={{ username: '', password: '', confirmPassword: '' }}
+          validationSchema={getValidationSchema}
           onSubmit={handleSubmit}
         >
-          {({ isSubmitting }) => (
+          {({ errors, touched, isSubmitting }) => (
             <Form>
               {errorMessage && (
                 <div className="alert alert-danger" role="alert">
@@ -54,32 +70,53 @@ const Login = () => {
 
               <div className="mb-3">
                 <label htmlFor="username" className="form-label">
-                  {t('login.username')}
+                  {t('signup.username')}
                 </label>
                 <Field
                   type="text"
                   id="username"
                   name="username"
-                  className="form-control"
-                  placeholder={t('login.username')}
-                  required
+                  className={`form-control ${errors.username && touched.username ? 'is-invalid' : ''}`}
+                  placeholder={t('signup.username')}
                   disabled={isLoading || isSubmitting}
                 />
+                {errors.username && touched.username && (
+                  <div className="invalid-feedback">{errors.username}</div>
+                )}
               </div>
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  {t('login.password')}
+                  {t('signup.password')}
                 </label>
                 <Field
                   type="password"
                   id="password"
                   name="password"
-                  className="form-control"
-                  placeholder={t('login.password')}
-                  required
+                  className={`form-control ${errors.password && touched.password ? 'is-invalid' : ''}`}
+                  placeholder={t('signup.password')}
                   disabled={isLoading || isSubmitting}
                 />
+                {errors.password && touched.password && (
+                  <div className="invalid-feedback">{errors.password}</div>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <label htmlFor="confirmPassword" className="form-label">
+                  {t('signup.confirmPassword')}
+                </label>
+                <Field
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  className={`form-control ${errors.confirmPassword && touched.confirmPassword ? 'is-invalid' : ''}`}
+                  placeholder={t('signup.confirmPassword')}
+                  disabled={isLoading || isSubmitting}
+                />
+                {errors.confirmPassword && touched.confirmPassword && (
+                  <div className="invalid-feedback">{errors.confirmPassword}</div>
+                )}
               </div>
 
               <button 
@@ -87,12 +124,12 @@ const Login = () => {
                 className="btn btn-primary w-100 mb-3"
                 disabled={isLoading || isSubmitting}
               >
-                {t('login.submit')}
+                {isLoading || isSubmitting ? t('signup.submitting') : t('signup.submit')}
               </button>
 
               <div className="text-center">
-                <span className="text-muted">{t('login.noAccount')} </span>
-                <Link to="/signup">{t('login.signupLink')}</Link>
+                <span className="text-muted">{t('signup.hasAccount')} </span>
+                <Link to="/login">{t('signup.loginLink')}</Link>
               </div>
             </Form>
           )}
@@ -102,4 +139,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Signup
