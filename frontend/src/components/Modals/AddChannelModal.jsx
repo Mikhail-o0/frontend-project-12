@@ -1,7 +1,7 @@
 import { Modal, Form, Button } from 'react-bootstrap'
 import { Formik, Field } from 'formik'
 import * as yup from 'yup'
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useAddChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
@@ -13,13 +13,8 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   const { data: channels } = useGetChannelsQuery()
   const inputRef = useRef(null)
 
-  useEffect(() => {
-    if (show && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 100)
-    }
-  }, [show])
-
-  const validationSchema = yup.object().shape({
+  // Мемоизируем схему валидации, чтобы она не пересоздавалась при каждом рендере
+  const validationSchema = useMemo(() => yup.object().shape({
     name: yup
       .string()
       .required(t('modals.add.errors.required'))
@@ -33,7 +28,13 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
           return !channels.some(ch => ch.name === value)
         }
       ),
-  })
+  }), [channels, t])
+
+  useEffect(() => {
+    if (show && inputRef.current) {
+      setTimeout(() => inputRef.current?.focus(), 100)
+    }
+  }, [show])
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
     if (containsProfanity(values.name)) {
@@ -65,10 +66,9 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
         initialValues={{ name: '' }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        validateOnChange={true}
-        validateOnBlur={true}
+        enableReinitialize={false}
       >
-        {({ handleSubmit, errors, touched, isSubmitting, isValidating }) => (
+        {({ handleSubmit, errors, touched, isSubmitting }) => (
           <Form onSubmit={handleSubmit} noValidate>
             <Modal.Body>
               <Form.Group>
@@ -79,7 +79,7 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
                   placeholder={t('modals.add.placeholder')}
                   ref={inputRef}
                   isInvalid={!!errors.name && (touched.name || true)}
-                  disabled={isLoading || isSubmitting || isValidating}
+                  disabled={isLoading || isSubmitting}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.name}
@@ -90,7 +90,7 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
               <Button variant="secondary" onClick={onClose} disabled={isLoading || isSubmitting}>
                 {t('modals.add.cancel')}
               </Button>
-              <Button variant="primary" type="submit" disabled={isLoading || isSubmitting || isValidating}>
+              <Button variant="primary" type="submit" disabled={isLoading || isSubmitting}>
                 {t('modals.add.submit')}
               </Button>
             </Modal.Footer>
