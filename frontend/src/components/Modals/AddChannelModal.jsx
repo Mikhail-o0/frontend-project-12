@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useAddChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
-import { containsProfanity } from '../../utils/profanityFilter'
+import { censorText } from '../../utils/profanityFilter'
 
 const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   const { t } = useTranslation()
@@ -24,8 +24,11 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   }, [show])
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
-    const name = values.name.trim()
-    
+    // Цензурируем нецензурную лексику вместо блокировки
+    let name = censorText(values.name.trim())
+    console.log('Original name:', values.name)
+  console.log('Censored name:', name)
+  console.log('Name length:', name.length)
     if (!name) {
       setFieldError('name', t('modals.add.errors.required'))
       return
@@ -38,11 +41,6 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
     
     if (channels?.some(ch => ch.name === name)) {
       setFieldError('name', t('modals.add.errors.unique'))
-      return
-    }
-    
-    if (containsProfanity(name)) {
-      setFieldError('name', t('profanity.channelNameContains'))
       return
     }
 

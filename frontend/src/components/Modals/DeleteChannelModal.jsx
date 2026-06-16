@@ -24,8 +24,8 @@ const DeleteChannelModal = ({ show, onClose, channelId, channelName }) => {
         <Modal.Title>{t('modals.delete.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{t('modals.delete.confirm')} <strong>"{channelName}"</strong>?</p>
-        <p className="text-muted small">{t('modals.delete.warning')}</p>
+        <p>{t('modals.delete.confirm')}</p>
+        
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose} disabled={isLoading}>
