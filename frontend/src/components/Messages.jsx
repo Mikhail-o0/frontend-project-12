@@ -19,10 +19,12 @@ const Messages = ({ channelId, channelName }) => {
 
   useEffect(() => {
     if (messages) {
-      const filtered = messages.map(msg => ({
-        ...msg,
-        username: msg.username || msg.author || 'Unknown'
-      })).filter(msg => msg.channelId === channelId)
+      const filtered = messages
+        .filter(msg => msg.channelId === channelId)
+        .map(msg => ({
+          ...msg,
+          username: msg.username || msg.author || 'Unknown'
+        }))
       setLocalMessages(filtered)
     }
   }, [messages, channelId])
@@ -36,11 +38,10 @@ const Messages = ({ channelId, channelName }) => {
           const exists = prev.some(msg => msg.id === message.id)
           if (exists) return prev
           
-          const msgWithUsername = {
+          return [...prev, {
             ...message,
             username: message.username || message.author || 'Unknown'
-          }
-          return [...prev, msgWithUsername]
+          }]
         })
       }
     }
@@ -69,6 +70,7 @@ const Messages = ({ channelId, channelName }) => {
     const messageData = {
       body: newMessage,
       channelId,
+      username: currentUser,
     }
 
     try {
