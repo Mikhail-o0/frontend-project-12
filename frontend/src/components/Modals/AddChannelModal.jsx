@@ -7,13 +7,11 @@ import { toast } from 'react-toastify'
 import { useAddChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
 import { containsProfanity } from '../../utils/profanityFilter'
 
-const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
-  const { t } = useTranslation()
+// Выносим форму в отдельный компонент, чтобы она не пересоздавалась
+const ChannelForm = ({ onClose, onSelectChannel, channels, t }) => {
   const [addChannel, { isLoading }] = useAddChannelMutation()
-  const { data: channels } = useGetChannelsQuery()
   const inputRef = useRef(null)
 
-  // Мемоизируем схему валидации, чтобы она не пересоздавалась при каждом рендере
   const validationSchema = useMemo(() => yup.object().shape({
     name: yup
       .string()
@@ -31,10 +29,8 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   }), [channels, t])
 
   useEffect(() => {
-    if (show && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 100)
-    }
-  }, [show])
+    setTimeout(() => inputRef.current?.focus(), 100)
+  }, [])
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
     if (containsProfanity(values.name)) {
@@ -58,45 +54,60 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   }
 
   return (
+    <Formik
+      initialValues={{ name: '' }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ handleSubmit, errors, touched, isSubmitting }) => (
+        <Form onSubmit={handleSubmit} noValidate>
+          <Modal.Body>
+            <Form.Group>
+              <Form.Label>{t('modals.add.placeholder')}</Form.Label>
+              <Field
+                as={Form.Control}
+                name="name"
+                placeholder={t('modals.add.placeholder')}
+                innerRef={inputRef}
+                isInvalid={!!errors.name}
+                disabled={isLoading || isSubmitting}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.name}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={onClose} disabled={isLoading || isSubmitting}>
+              {t('modals.add.cancel')}
+            </Button>
+            <Button variant="primary" type="submit" disabled={isLoading || isSubmitting}>
+              {t('modals.add.submit')}
+            </Button>
+          </Modal.Footer>
+        </Form>
+      )}
+    </Formik>
+  )
+}
+
+const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
+  const { t } = useTranslation()
+  const { data: channels } = useGetChannelsQuery()
+
+  return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('modals.add.title')}</Modal.Title>
       </Modal.Header>
-      <Formik
-        initialValues={{ name: '' }}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-        enableReinitialize={false}
-      >
-        {({ handleSubmit, errors, touched, isSubmitting }) => (
-          <Form onSubmit={handleSubmit} noValidate>
-            <Modal.Body>
-              <Form.Group>
-                <Form.Label>{t('modals.add.placeholder')}</Form.Label>
-                <Field
-                  as={Form.Control}
-                  name="name"
-                  placeholder={t('modals.add.placeholder')}
-                  ref={inputRef}
-                  isInvalid={!!errors.name && (touched.name || true)}
-                  disabled={isLoading || isSubmitting}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.name}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={onClose} disabled={isLoading || isSubmitting}>
-                {t('modals.add.cancel')}
-              </Button>
-              <Button variant="primary" type="submit" disabled={isLoading || isSubmitting}>
-                {t('modals.add.submit')}
-              </Button>
-            </Modal.Footer>
-          </Form>
-        )}
-      </Formik>
+      {show && (
+        <ChannelForm 
+          onClose={onClose} 
+          onSelectChannel={onSelectChannel} 
+          channels={channels}
+          t={t}
+        />
+      )}
     </Modal>
   )
 }
