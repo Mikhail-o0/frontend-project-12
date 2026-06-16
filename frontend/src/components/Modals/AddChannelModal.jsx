@@ -36,7 +36,6 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   })
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
-
     if (containsProfanity(values.name)) {
       setFieldError('name', t('profanity.channelNameContains'))
       return
@@ -71,6 +70,7 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
           <Form onSubmit={handleSubmit} noValidate>
             <Modal.Body>
               <Form.Group>
+                <Form.Label>{t('modals.add.placeholder')}</Form.Label>
                 <Field
                   as={Form.Control}
                   name="name"
@@ -89,7 +89,7 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
                 {t('modals.add.cancel')}
               </Button>
               <Button variant="primary" type="submit" disabled={isLoading || isSubmitting}>
-                {isLoading || isSubmitting ? t('modals.add.submitting') : t('modals.add.submit')}
+                {t('modals.add.submit')}
               </Button>
             </Modal.Footer>
           </Form>

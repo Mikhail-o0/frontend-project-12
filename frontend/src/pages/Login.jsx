@@ -84,7 +84,7 @@ const Login = () => {
                 className="btn btn-primary w-100 mb-3"
                 disabled={isLoading || isSubmitting}
               >
-                {isLoading || isSubmitting ? t('login.submitting') : t('login.submit')}
+                {t('login.submit')}
               </button>
 
               <div className="text-center">

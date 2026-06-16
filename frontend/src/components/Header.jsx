@@ -27,6 +27,7 @@ const Header = () => {
               {user}
             </span>
             <button 
+              type="button"
               className="btn btn-outline-secondary btn-sm"
               onClick={handleLogout}
             >

@@ -25,6 +25,7 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
   return (
     <div className="position-relative" ref={dropdownRef}>
       <button
+        type="button"
         className="btn btn-sm btn-outline-secondary"
         onClick={(e) => {
           e.stopPropagation()
@@ -41,6 +42,7 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
           style={{ right: 0, top: '100%', zIndex: 1000 }}
         >
           <button
+            type="button"
             className="dropdown-item"
             onClick={(e) => {
               e.stopPropagation()
@@ -51,6 +53,7 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
             {t('dropdown.rename')}
           </button>
           <button
+            type="button"
             className="dropdown-item text-danger"
             onClick={(e) => {
               e.stopPropagation()

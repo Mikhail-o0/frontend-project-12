@@ -36,7 +36,6 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   })
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
-
     if (containsProfanity(values.name)) {
       setFieldError('name', t('profanity.channelNameContains'))
       return
@@ -71,6 +70,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
           <Form onSubmit={handleSubmit} noValidate>
             <Modal.Body>
               <Form.Group>
+                <Form.Label>{t('modals.rename.placeholder')}</Form.Label>
                 <Field
                   as={Form.Control}
                   name="name"
@@ -89,7 +89,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
                 {t('modals.rename.cancel')}
               </Button>
               <Button variant="primary" type="submit" disabled={isLoading || isSubmitting}>
-                {isLoading || isSubmitting ? t('modals.rename.submitting') : t('modals.rename.submit')}
+                {t('modals.rename.submit')}
               </Button>
             </Modal.Footer>
           </Form>

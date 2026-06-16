@@ -2,16 +2,16 @@
   "title": "Hexlet Chat",
   "login": {
     "pageName": "Войти",
-    "username": "Имя пользователя",
+    "username": "Ваш ник",
     "password": "Пароль",
     "submit": "Войти",
-    "submitting": "Вход...",
+    "submitting": "Войти",
     "noAccount": "Нет аккаунта?",
     "signupLink": "Зарегистрироваться",
     "errors": {
       "required": "Обязательное поле",
       "invalidCredentials": "Неверные имя пользователя или пароль",
-      "connection": "Ошибка соединения с сервером"
+      "connection": "Ошибка соединения"
     }
   },
   "signup": {
@@ -20,7 +20,7 @@
     "password": "Пароль",
     "confirmPassword": "Подтвердите пароль",
     "submit": "Зарегистрироваться",
-    "submitting": "Регистрация...",
+    "submitting": "Зарегистрироваться",
     "hasAccount": "Уже есть аккаунт?",
     "loginLink": "Войти",
     "errors": {
@@ -57,10 +57,10 @@
   "modals": {
     "add": {
       "title": "Добавить канал",
-      "placeholder": "Введите название канала",
+      "placeholder": "Имя канала",
       "cancel": "Отмена",
       "submit": "Отправить",
-      "submitting": "Создание...",
+      "submitting": "Отправить",
       "errors": {
         "required": "Обязательное поле",
         "length": "От 3 до 20 символов",
@@ -70,10 +70,10 @@
     },
     "rename": {
       "title": "Переименовать канал",
-      "placeholder": "Введите новое название",
+      "placeholder": "Имя канала",
       "cancel": "Отмена",
       "submit": "Сохранить",
-      "submitting": "Сохранение...",
+      "submitting": "Сохранить",
       "errors": {
         "required": "Обязательное поле",
         "length": "От 3 до 20 символов",
@@ -111,7 +111,7 @@
       "channelDeleted": "Канал удалён"
     },
     "error": {
-      "networkError": "Ошибка соединения с сервером",
+      "networkError": "Ошибка соединения",
       "loadingError": "Ошибка загрузки данных",
       "messageSendError": "Не удалось отправить сообщение",
       "channelCreateError": "Не удалось создать канал",
