@@ -1,6 +1,5 @@
 import { Modal, Form, Button } from 'react-bootstrap'
 import { Formik, Form as FormikForm, Field } from 'formik'
-import * as yup from 'yup'
 import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
@@ -71,14 +70,18 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
         initialValues={{ name: '' }}
         onSubmit={handleSubmit}
       >
-        {({ handleSubmit, errors, touched, isSubmitting }) => (
+        {({ handleSubmit, errors, isSubmitting }) => (
           <FormikForm onSubmit={handleSubmit}>
             <Modal.Body>
               <Form.Group>
-                <Form.Label className="visually-hidden">{t('modals.add.placeholder')}</Form.Label>
+                <Form.Label htmlFor="channel-name-input" className="visually-hidden">
+                  {t('modals.add.placeholder')}
+                </Form.Label>
                 <Field
                   as={Form.Control}
+                  id="channel-name-input"
                   name="name"
+                  placeholder={t('modals.add.placeholder')}
                   ref={inputRef}
                   isInvalid={!!errors.name}
                   disabled={isLoading || isSubmitting}
