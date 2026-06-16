@@ -14,23 +14,44 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
     }
 
     if (show) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      // Добавляем listener с задержкой, чтобы dropdown не закрывался сразу
+      const timer = setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside)
+      }, 0)
+      
+      return () => {
+        clearTimeout(timer)
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
     }
   }, [show])
+
+  const handleToggle = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    setShow(!show)
+  }
+
+  const handleRename = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    onRename(channel)
+    setShow(false)
+  }
+
+  const handleDelete = (e) => {
+    e.stopPropagation()
+    e.preventDefault()
+    onDelete(channel)
+    setShow(false)
+  }
 
   return (
     <div className="position-relative" ref={dropdownRef}>
       <button
         type="button"
         className="btn btn-sm btn-outline-secondary"
-        onClick={(e) => {
-          e.stopPropagation()
-          setShow(!show)
-        }}
+        onClick={handleToggle}
         aria-label={t('dropdown.ariaLabel')}
       >
         ⋮
@@ -44,22 +65,14 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
           <button
             type="button"
             className="dropdown-item text-danger"
-            onClick={(e) => {
-              e.stopPropagation()
-              onDelete(channel)
-              setShow(false)
-            }}
+            onClick={handleDelete}
           >
             {t('dropdown.delete')}
           </button>
           <button
             type="button"
             className="dropdown-item"
-            onClick={(e) => {
-              e.stopPropagation()
-              onRename(channel)
-              setShow(false)
-            }}
+            onClick={handleRename}
           >
             {t('dropdown.rename')}
           </button>
