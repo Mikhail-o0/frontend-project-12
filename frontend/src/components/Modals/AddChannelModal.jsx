@@ -1,7 +1,7 @@
 import { Modal, Form, Button } from 'react-bootstrap'
 import { Formik, Form as FormikForm, Field } from 'formik'
 import * as yup from 'yup'
-import { useRef, useEffect, useMemo } from 'react'
+import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useAddChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
@@ -12,23 +12,6 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   const [addChannel, { isLoading }] = useAddChannelMutation()
   const { data: channels } = useGetChannelsQuery()
   const inputRef = useRef(null)
-
-  const validationSchema = useMemo(() => yup.object().shape({
-    name: yup
-      .string()
-      .trim()
-      .required(t('modals.add.errors.required'))
-      .min(3, t('modals.add.errors.length'))
-      .max(20, t('modals.add.errors.length'))
-      .test(
-        'unique',
-        t('modals.add.errors.unique'),
-        (value) => {
-          if (!channels) return true
-          return !channels.some(ch => ch.name === value)
-        }
-      ),
-  }), [channels, t])
 
   useEffect(() => {
     if (show) {
@@ -42,13 +25,30 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   }, [show])
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
-    if (containsProfanity(values.name)) {
+    const name = values.name.trim()
+    
+    if (!name) {
+      setFieldError('name', t('modals.add.errors.required'))
+      return
+    }
+    
+    if (name.length < 3 || name.length > 20) {
+      setFieldError('name', t('modals.add.errors.length'))
+      return
+    }
+    
+    if (channels?.some(ch => ch.name === name)) {
+      setFieldError('name', t('modals.add.errors.unique'))
+      return
+    }
+    
+    if (containsProfanity(name)) {
       setFieldError('name', t('profanity.channelNameContains'))
       return
     }
 
     try {
-      const newChannel = await addChannel({ name: values.name.trim() }).unwrap()
+      const newChannel = await addChannel({ name }).unwrap()
       resetForm()
       onSelectChannel(newChannel.id)
       onClose()
@@ -69,21 +69,18 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
       </Modal.Header>
       <Formik
         initialValues={{ name: '' }}
-        validationSchema={validationSchema}
         onSubmit={handleSubmit}
-        enableReinitialize={false}
       >
         {({ handleSubmit, errors, touched, isSubmitting }) => (
-          <FormikForm onSubmit={handleSubmit} noValidate>
+          <FormikForm onSubmit={handleSubmit}>
             <Modal.Body>
               <Form.Group>
+                <Form.Label className="visually-hidden">{t('modals.add.placeholder')}</Form.Label>
                 <Field
                   as={Form.Control}
                   name="name"
-                  placeholder={t('modals.add.placeholder')}
-                  aria-label={t('modals.add.placeholder')}
                   ref={inputRef}
-                  isInvalid={!!errors.name && touched.name}
+                  isInvalid={!!errors.name}
                   disabled={isLoading || isSubmitting}
                 />
                 <Form.Control.Feedback type="invalid">
