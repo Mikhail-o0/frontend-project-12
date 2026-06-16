@@ -1,0 +1,107 @@
+{
+  "title": "Hexlet Chat",
+  "login": {
+    "pageName": "Login",
+    "username": "Username",
+    "password": "Password",
+    "submit": "Log In",
+    "submitting": "Logging in...",
+    "noAccount": "No account?",
+    "signupLink": "Sign up",
+    "errors": {
+      "required": "Required field",
+      "invalidCredentials": "Invalid username or password",
+      "connection": "Connection error"
+    }
+  },
+  "signup": {
+    "pageName": "Sign Up",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "submit": "Sign Up",
+    "submitting": "Signing up...",
+    "hasAccount": "Already have an account?",
+    "loginLink": "Log in",
+    "errors": {
+      "required": "Required field",
+      "usernameLength": "From 3 to 20 characters",
+      "passwordLength": "At least 6 characters",
+      "passwordMismatch": "Passwords must match",
+      "userExists": "User with this username already exists",
+      "registration": "Registration error. Please try again"
+    }
+  },
+  "header": {
+    "logout": "Log out"
+  },
+  "chat": {
+    "loading": "Loading chat...",
+    "channels": {
+      "title": "Channels",
+      "add": "Add channel"
+    },
+    "messages": {
+      "title": "Messages",
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "empty": "No messages. Be the first!",
+      "placeholder": "Enter message...",
+      "send": "Send",
+      "sending": "Sending...",
+      "sendError": "Failed to send message. Please try again",
+      "loading": "Loading messages...",
+      "error": "Error loading messages"
+    }
+  },
+  "modals": {
+    "add": {
+      "title": "Add channel",
+      "placeholder": "Enter channel name",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "submitting": "Creating...",
+      "errors": {
+        "required": "Required field",
+        "length": "From 3 to 20 characters",
+        "unique": "Channel with this name already exists",
+        "create": "Failed to create channel"
+      }
+    },
+    "rename": {
+      "title": "Rename channel",
+      "placeholder": "Enter new name",
+      "cancel": "Cancel",
+      "submit": "Save",
+      "submitting": "Saving...",
+      "errors": {
+        "required": "Required field",
+        "length": "From 3 to 20 characters",
+        "unique": "Channel with this name already exists",
+        "rename": "Failed to rename channel"
+      }
+    },
+    "delete": {
+      "title": "Delete channel",
+      "confirm": "Are you sure you want to delete channel",
+      "warning": "All messages of this channel will be deleted.",
+      "cancel": "Cancel",
+      "submit": "Delete",
+      "submitting": "Deleting...",
+      "error": "Failed to delete channel"
+    }
+  },
+  "dropdown": {
+    "rename": "Rename",
+    "delete": "Delete",
+    "ariaLabel": "Channel management"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "link": "Back to home"
+  },
+  "loading": {
+    "channels": "Loading channels...",
+    "channelsError": "Error loading channels"
+  }
+}

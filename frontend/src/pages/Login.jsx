@@ -1,11 +1,13 @@
 import { Formik, Form, Field } from 'formik'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import { useLoginMutation } from '../api/authApi'
 import { setCredentials } from '../slices/authSlice'
 import { useState } from 'react'
 
 const Login = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [login, { isLoading }] = useLoginMutation()
@@ -22,9 +24,9 @@ const Login = () => {
       navigate('/')
     } catch (err) {
       if (err.status === 401) {
-        setErrorMessage('Неверные имя пользователя или пароль')
+        setErrorMessage(t('login.errors.invalidCredentials'))
       } else {
-        setErrorMessage('Ошибка соединения с сервером')
+        setErrorMessage(t('login.errors.connection'))
       }
     } finally {
       setSubmitting(false)
@@ -34,7 +36,7 @@ const Login = () => {
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
       <div className="card p-4" style={{ width: '400px' }}>
-        <h2 className="text-center mb-4">Войти</h2>
+        <h2 className="text-center mb-4">{t('login.pageName')}</h2>
         <Formik
           initialValues={{ username: '', password: '' }}
           onSubmit={handleSubmit}
@@ -49,14 +51,14 @@ const Login = () => {
 
               <div className="mb-3">
                 <label htmlFor="username" className="form-label">
-                  Имя пользователя
+                  {t('login.username')}
                 </label>
                 <Field
                   type="text"
                   id="username"
                   name="username"
                   className="form-control"
-                  placeholder="Введите имя пользователя"
+                  placeholder={t('login.username')}
                   required
                   disabled={isLoading || isSubmitting}
                 />
@@ -64,14 +66,14 @@ const Login = () => {
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  Пароль
+                  {t('login.password')}
                 </label>
                 <Field
                   type="password"
                   id="password"
                   name="password"
                   className="form-control"
-                  placeholder="Введите пароль"
+                  placeholder={t('login.password')}
                   required
                   disabled={isLoading || isSubmitting}
                 />
@@ -82,12 +84,12 @@ const Login = () => {
                 className="btn btn-primary w-100 mb-3"
                 disabled={isLoading || isSubmitting}
               >
-                {isLoading || isSubmitting ? 'Вход...' : 'Войти'}
+                {isLoading || isSubmitting ? t('login.submitting') : t('login.submit')}
               </button>
 
               <div className="text-center">
-                <span className="text-muted">Нет аккаунта? </span>
-                <Link to="/signup">Зарегистрироваться</Link>
+                <span className="text-muted">{t('login.noAccount')} </span>
+                <Link to="/signup">{t('login.signupLink')}</Link>
               </div>
             </Form>
           )}

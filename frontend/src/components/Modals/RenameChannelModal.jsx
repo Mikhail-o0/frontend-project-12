@@ -2,9 +2,11 @@ import { Modal, Form, Button } from 'react-bootstrap'
 import { Formik, Field } from 'formik'
 import * as yup from 'yup'
 import { useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useRenameChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
 
 const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
+  const { t } = useTranslation()
   const [renameChannel, { isLoading }] = useRenameChannelMutation()
   const { data: channels } = useGetChannelsQuery()
   const inputRef = useRef(null)
@@ -15,15 +17,15 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
     }
   }, [show])
 
-  const validationSchema = yup.object().shape({
+  const getValidationSchema = () => yup.object().shape({
     name: yup
       .string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
+      .required(t('modals.rename.errors.required'))
+      .min(3, t('modals.rename.errors.length'))
+      .max(20, t('modals.rename.errors.length'))
       .test(
         'unique',
-        'Канал с таким именем уже существует',
+        t('modals.rename.errors.unique'),
         (value) => {
           if (!channels) return true
           return !channels.some(ch => ch.name === value && ch.id !== channelId)
@@ -38,7 +40,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
       onClose()
     } catch (err) {
       console.error('Ошибка переименования:', err)
-      setFieldError('name', 'Не удалось переименовать канал')
+      setFieldError('name', t('modals.rename.errors.rename'))
     } finally {
       setSubmitting(false)
     }
@@ -47,11 +49,11 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('modals.rename.title')}</Modal.Title>
       </Modal.Header>
       <Formik
         initialValues={{ name: currentName || '' }}
-        validationSchema={validationSchema}
+        validationSchema={getValidationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
       >
@@ -62,7 +64,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
                 <Field
                   as={Form.Control}
                   name="name"
-                  placeholder="Введите новое название"
+                  placeholder={t('modals.rename.placeholder')}
                   ref={inputRef}
                   isInvalid={!!errors.name && touched.name}
                   disabled={isLoading || isSubmitting}
@@ -74,10 +76,10 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={onClose} disabled={isLoading || isSubmitting}>
-                Отмена
+                {t('modals.rename.cancel')}
               </Button>
               <Button variant="primary" type="submit" disabled={isLoading || isSubmitting}>
-                {isLoading || isSubmitting ? 'Сохранение...' : 'Сохранить'}
+                {isLoading || isSubmitting ? t('modals.rename.submitting') : t('modals.rename.submit')}
               </Button>
             </Modal.Footer>
           </Form>

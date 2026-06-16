@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGetChannelsQuery } from '../api/channelsApi'
 import Channels from '../components/Channels'
 import Messages from '../components/Messages'
@@ -7,6 +8,7 @@ import RenameChannelModal from '../components/Modals/RenameChannelModal'
 import DeleteChannelModal from '../components/Modals/DeleteChannelModal'
 
 const Chat = () => {
+  const { t } = useTranslation()
   const { data: channels } = useGetChannelsQuery()
   const [activeChannelId, setActiveChannelId] = useState(null)
   
@@ -41,7 +43,7 @@ const Chat = () => {
   if (!channels || !activeChannelId) {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ height: 'calc(100vh - 56px)' }}>
-        Загрузка чата...
+        {t('chat.loading')}
       </div>
     )
   }

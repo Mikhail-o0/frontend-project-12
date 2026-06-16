@@ -1,31 +1,33 @@
 import { Formik, Form, Field } from 'formik'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import { useSignupMutation } from '../api/authApi'
 import { setCredentials } from '../slices/authSlice'
 import { useState } from 'react'
 import * as yup from 'yup'
 
 const Signup = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [signup, { isLoading }] = useSignupMutation()
   const [errorMessage, setErrorMessage] = useState('')
 
-  const validationSchema = yup.object().shape({
+  const getValidationSchema = () => yup.object().shape({
     username: yup
       .string()
-      .required('Обязательное поле')
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов'),
+      .required(t('signup.errors.required'))
+      .min(3, t('signup.errors.usernameLength'))
+      .max(20, t('signup.errors.usernameLength')),
     password: yup
       .string()
-      .required('Обязательное поле')
-      .min(6, 'Не менее 6 символов'),
+      .required(t('signup.errors.required'))
+      .min(6, t('signup.errors.passwordLength')),
     confirmPassword: yup
       .string()
-      .required('Обязательное поле')
-      .oneOf([yup.ref('password'), null], 'Пароли не совпадают'),
+      .required(t('signup.errors.required'))
+      .oneOf([yup.ref('password'), null], t('signup.errors.passwordMismatch')),
   })
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
@@ -40,9 +42,9 @@ const Signup = () => {
       navigate('/')
     } catch (err) {
       if (err.status === 409) {
-        setFieldError('username', 'Пользователь с таким именем уже существует')
+        setFieldError('username', t('signup.errors.userExists'))
       } else {
-        setErrorMessage('Ошибка регистрации. Попробуйте еще раз.')
+        setErrorMessage(t('signup.errors.registration'))
       }
     } finally {
       setSubmitting(false)
@@ -52,10 +54,10 @@ const Signup = () => {
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
       <div className="card p-4" style={{ width: '400px' }}>
-        <h2 className="text-center mb-4">Регистрация</h2>
+        <h2 className="text-center mb-4">{t('signup.pageName')}</h2>
         <Formik
           initialValues={{ username: '', password: '', confirmPassword: '' }}
-          validationSchema={validationSchema}
+          validationSchema={getValidationSchema}
           onSubmit={handleSubmit}
         >
           {({ errors, touched, isSubmitting }) => (
@@ -68,14 +70,14 @@ const Signup = () => {
 
               <div className="mb-3">
                 <label htmlFor="username" className="form-label">
-                  Имя пользователя
+                  {t('signup.username')}
                 </label>
                 <Field
                   type="text"
                   id="username"
                   name="username"
                   className={`form-control ${errors.username && touched.username ? 'is-invalid' : ''}`}
-                  placeholder="Введите имя пользователя"
+                  placeholder={t('signup.username')}
                   disabled={isLoading || isSubmitting}
                 />
                 {errors.username && touched.username && (
@@ -85,14 +87,14 @@ const Signup = () => {
 
               <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  Пароль
+                  {t('signup.password')}
                 </label>
                 <Field
                   type="password"
                   id="password"
                   name="password"
                   className={`form-control ${errors.password && touched.password ? 'is-invalid' : ''}`}
-                  placeholder="Введите пароль"
+                  placeholder={t('signup.password')}
                   disabled={isLoading || isSubmitting}
                 />
                 {errors.password && touched.password && (
@@ -102,14 +104,14 @@ const Signup = () => {
 
               <div className="mb-3">
                 <label htmlFor="confirmPassword" className="form-label">
-                  Подтверждение пароля
+                  {t('signup.confirmPassword')}
                 </label>
                 <Field
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
                   className={`form-control ${errors.confirmPassword && touched.confirmPassword ? 'is-invalid' : ''}`}
-                  placeholder="Повторите пароль"
+                  placeholder={t('signup.confirmPassword')}
                   disabled={isLoading || isSubmitting}
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
@@ -122,12 +124,12 @@ const Signup = () => {
                 className="btn btn-primary w-100 mb-3"
                 disabled={isLoading || isSubmitting}
               >
-                {isLoading || isSubmitting ? 'Регистрация...' : 'Зарегистрироваться'}
+                {isLoading || isSubmitting ? t('signup.submitting') : t('signup.submit')}
               </button>
 
               <div className="text-center">
-                <span className="text-muted">Уже есть аккаунт? </span>
-                <Link to="/login">Войти</Link>
+                <span className="text-muted">{t('signup.hasAccount')} </span>
+                <Link to="/login">{t('signup.loginLink')}</Link>
               </div>
             </Form>
           )}

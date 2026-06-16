@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const ChannelDropdown = ({ channel, onRename, onDelete }) => {
+  const { t } = useTranslation()
   const [show, setShow] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -28,7 +30,7 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
           e.stopPropagation()
           setShow(!show)
         }}
-        aria-label="Управление каналом"
+        aria-label={t('dropdown.ariaLabel')}
       >
         ⋮
       </button>
@@ -46,7 +48,7 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
               setShow(false)
             }}
           >
-            Переименовать
+            {t('dropdown.rename')}
           </button>
           <button
             className="dropdown-item text-danger"
@@ -56,7 +58,7 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
               setShow(false)
             }}
           >
-            Удалить
+            {t('dropdown.delete')}
           </button>
         </div>
       )}

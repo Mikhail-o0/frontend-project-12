@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import ChannelDropdown from './ChannelDropdown'
 
 const Channels = ({ 
@@ -8,18 +9,20 @@ const Channels = ({
   onRenameChannel,
   onDeleteChannel
 }) => {
+  const { t } = useTranslation()
+
   if (!channels) {
-    return <div className="p-3">Загрузка каналов...</div>
+    return <div className="p-3">{t('loading.channels')}</div>
   }
 
   return (
     <div className="d-flex flex-column h-100">
       <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
-        <h5 className="m-0">Каналы</h5>
+        <h5 className="m-0">{t('chat.channels.title')}</h5>
         <button 
           className="btn btn-sm btn-outline-primary"
           onClick={onAddChannel}
-          aria-label="Добавить канал"
+          aria-label={t('chat.channels.add')}
         >
           +
         </button>
