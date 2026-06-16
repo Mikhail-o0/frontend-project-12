@@ -19,7 +19,7 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
     }
   }, [show])
 
-  const getValidationSchema = () => yup.object().shape({
+  const validationSchema = yup.object().shape({
     name: yup
       .string()
       .required(t('modals.add.errors.required'))
@@ -63,10 +63,12 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
       </Modal.Header>
       <Formik
         initialValues={{ name: '' }}
-        validationSchema={getValidationSchema}
+        validationSchema={validationSchema}
         onSubmit={handleSubmit}
+        validateOnChange={true}
+        validateOnBlur={true}
       >
-        {({ handleSubmit, errors, touched, isSubmitting }) => (
+        {({ handleSubmit, errors, touched, isSubmitting, isValidating }) => (
           <Form onSubmit={handleSubmit} noValidate>
             <Modal.Body>
               <Form.Group>
@@ -76,8 +78,8 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
                   name="name"
                   placeholder={t('modals.add.placeholder')}
                   ref={inputRef}
-                  isInvalid={!!errors.name && touched.name}
-                  disabled={isLoading || isSubmitting}
+                  isInvalid={!!errors.name && (touched.name || true)}
+                  disabled={isLoading || isSubmitting || isValidating}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.name}
@@ -88,7 +90,7 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
               <Button variant="secondary" onClick={onClose} disabled={isLoading || isSubmitting}>
                 {t('modals.add.cancel')}
               </Button>
-              <Button variant="primary" type="submit" disabled={isLoading || isSubmitting}>
+              <Button variant="primary" type="submit" disabled={isLoading || isSubmitting || isValidating}>
                 {t('modals.add.submit')}
               </Button>
             </Modal.Footer>
