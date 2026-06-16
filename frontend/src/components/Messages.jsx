@@ -8,7 +8,7 @@ import { containsProfanity } from '../utils/profanityFilter'
 
 const Messages = ({ channelId, channelName }) => {
   const { t } = useTranslation()
-  const { data: messages, isLoading, error } = useGetMessagesQuery()
+  const { data: messages, isLoading, error, refetch } = useGetMessagesQuery()
   const [addMessage, { isLoading: isAdding }] = useAddMessageMutation()
   const { socket, isConnected } = useSocket()
   const [newMessage, setNewMessage] = useState('')
@@ -21,22 +21,27 @@ const Messages = ({ channelId, channelName }) => {
     if (messages) {
       const filtered = messages.map(msg => ({
         ...msg,
-        username: msg.username || msg.author || currentUser || 'Unknown'
+        username: msg.username || msg.author || 'Unknown'
       })).filter(msg => msg.channelId === channelId)
       setLocalMessages(filtered)
     }
-  }, [messages, channelId, currentUser])
+  }, [messages, channelId])
 
   useEffect(() => {
     if (!socket) return
 
     const handleNewMessage = (message) => {
       if (message.channelId === channelId) {
-        const msgWithUsername = {
-          ...message,
-          username: message.username || message.author || currentUser || 'Unknown'
-        }
-        setLocalMessages((prev) => [...prev, msgWithUsername])
+        setLocalMessages((prev) => {
+          const exists = prev.some(msg => msg.id === message.id)
+          if (exists) return prev
+          
+          const msgWithUsername = {
+            ...message,
+            username: message.username || message.author || 'Unknown'
+          }
+          return [...prev, msgWithUsername]
+        })
       }
     }
 
@@ -45,7 +50,7 @@ const Messages = ({ channelId, channelName }) => {
     return () => {
       socket.off('newMessage', handleNewMessage)
     }
-  }, [socket, channelId, currentUser])
+  }, [socket, channelId])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -69,6 +74,7 @@ const Messages = ({ channelId, channelName }) => {
     try {
       setNewMessage('')
       await addMessage(messageData).unwrap()
+      await refetch()
     } catch (err) {
       console.error('Ошибка отправки сообщения:', err)
       toast.error(t('toasts.error.messageSendError'))
