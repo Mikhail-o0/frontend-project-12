@@ -16,7 +16,10 @@ const useSocket = () => {
       return
     }
 
-    const socketUrl = window.location.origin
+    const isDevelopment = import.meta.env.DEV
+    const socketUrl = isDevelopment 
+      ? 'http://localhost:5001'
+      : window.location.origin
     
     console.log('Connecting to WebSocket:', socketUrl)
 
@@ -45,6 +48,7 @@ const useSocket = () => {
       socketInstance.on('connect_error', (error) => {
         console.error('WebSocket connection error:', error.message)
         setIsConnected(false)
+   
         if (!socketInstance.recovered) {
           toast.error(t('toasts.error.networkError'))
         }
