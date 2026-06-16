@@ -21,7 +21,9 @@ const Login = () => {
         token: response.token, 
         username: values.username 
       }))
-      navigate('/')
+      
+      // Принудительная перезагрузка страницы
+      window.location.href = '/'
     } catch (err) {
       if (err.status === 401) {
         setErrorMessage(t('login.errors.invalidCredentials'))
@@ -29,7 +31,7 @@ const Login = () => {
         setErrorMessage(t('login.errors.connection'))
       }
     } finally {
-      setSubmitting(false)
+        setSubmitting(false)
     }
   }
 
