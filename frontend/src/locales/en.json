@@ -118,5 +118,9 @@
       "channelRenameError": "Failed to rename channel",
       "channelDeleteError": "Failed to delete channel"
     }
+  },
+  "profanity": {
+    "messageContains": "Message contains profanity",
+    "channelNameContains": "Channel name contains profanity"
   }
 }

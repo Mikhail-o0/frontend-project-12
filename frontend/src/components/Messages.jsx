@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useGetMessagesQuery, useAddMessageMutation } from '../api/messagesApi'
 import useSocket from '../hooks/useSocket'
+import { containsProfanity } from '../utils/profanityFilter'
 
 const Messages = ({ channelId, channelName }) => {
   const { t } = useTranslation()
@@ -44,6 +45,11 @@ const Messages = ({ channelId, channelName }) => {
     e.preventDefault()
     
     if (!newMessage.trim()) return
+
+    if (containsProfanity(newMessage)) {
+      toast.error(t('profanity.messageContains'))
+      return
+    }
 
     const messageData = {
       body: newMessage,

@@ -5,6 +5,7 @@ import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { useAddChannelMutation, useGetChannelsQuery } from '../../api/channelsApi'
+import { containsProfanity } from '../../utils/profanityFilter'
 
 const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   const { t } = useTranslation()
@@ -35,6 +36,12 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
   })
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
+
+    if (containsProfanity(values.name)) {
+      setFieldError('name', t('profanity.channelNameContains'))
+      return
+    }
+
     try {
       const newChannel = await addChannel(values).unwrap()
       resetForm()

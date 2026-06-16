@@ -118,5 +118,9 @@
       "channelRenameError": "Не удалось переименовать канал",
       "channelDeleteError": "Не удалось удалить канал"
     }
+  },
+  "profanity": {
+    "messageContains": "Сообщение содержит нецензурную лексику",
+    "channelNameContains": "Название канала содержит нецензурную лексику"
   }
 }
