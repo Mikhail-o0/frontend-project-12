@@ -13,18 +13,19 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const inputRef = useRef(null)
 
   useEffect(() => {
-    if (show) {
+    if (show && inputRef.current) {
+      // Небольшая задержка для корректного фокуса
       const timer = setTimeout(() => {
         if (inputRef.current) {
           inputRef.current.focus()
+          inputRef.current.select() // Выделяем весь текст
         }
-      }, 200)
+      }, 100)
       return () => clearTimeout(timer)
     }
-  }, [show])
+  }, [show, currentName])
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
-    // Цензурируем нецензурную лексику
     const name = censorText(values.name.trim())
     
     if (!name) {
@@ -78,7 +79,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
                   id="rename-channel-input"
                   name="name"
                   placeholder={t('modals.rename.placeholder')}
-                  ref={inputRef}
+                  innerRef={inputRef}
                   isInvalid={!!errors.name}
                   disabled={isLoading || isSubmitting}
                 />
