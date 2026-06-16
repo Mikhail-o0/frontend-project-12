@@ -47,7 +47,8 @@ const Channels = ({
             >
               # {channel.name}
             </button>
-            {channel.removable && (
+            {/* Рендерим dropdown для всех каналов кроме general */}
+            {channel.name !== 'general' && (
               <ChannelDropdown
                 channel={channel}
                 onRename={onRenameChannel}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'  // <-- Добавьте эту строку
+import { useTranslation } from 'react-i18next'
 import { useGetChannelsQuery } from '../api/channelsApi'
 import Channels from '../components/Channels'
 import Messages from '../components/Messages'

@@ -7,41 +7,37 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
   const dropdownRef = useRef(null)
 
   useEffect(() => {
+    if (!show) return
+
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShow(false)
       }
     }
 
-    if (show) {
-      // Увеличиваем задержку до 100ms для надёжности
-      const timer = setTimeout(() => {
-        document.addEventListener('mousedown', handleClickOutside)
-      }, 100)
-      
-      return () => {
-        clearTimeout(timer)
-        document.removeEventListener('mousedown', handleClickOutside)
-      }
+    const timer = setTimeout(() => {
+      document.addEventListener('click', handleClickOutside)
+    }, 100)
+    
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('click', handleClickOutside)
     }
   }, [show])
 
   const handleToggle = (e) => {
     e.stopPropagation()
-    e.preventDefault()
     setShow(!show)
   }
 
   const handleRename = (e) => {
     e.stopPropagation()
-    e.preventDefault()
     onRename(channel)
     setShow(false)
   }
 
   const handleDelete = (e) => {
     e.stopPropagation()
-    e.preventDefault()
     onDelete(channel)
     setShow(false)
   }
@@ -52,10 +48,9 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
         type="button"
         className="btn btn-sm btn-outline-secondary"
         onClick={handleToggle}
-        aria-label={t('dropdown.ariaLabel')}
         title={t('dropdown.ariaLabel')}
       >
-        ⋮
+        {t('dropdown.ariaLabel')}
       </button>
       
       {show && (
@@ -65,17 +60,17 @@ const ChannelDropdown = ({ channel, onRename, onDelete }) => {
         >
           <button
             type="button"
-            className="dropdown-item text-danger"
-            onClick={handleDelete}
-          >
-            {t('dropdown.delete')}
-          </button>
-          <button
-            type="button"
             className="dropdown-item"
             onClick={handleRename}
           >
             {t('dropdown.rename')}
+          </button>
+          <button
+            type="button"
+            className="dropdown-item text-danger"
+            onClick={handleDelete}
+          >
+            {t('dropdown.delete')}
           </button>
         </div>
       )}
