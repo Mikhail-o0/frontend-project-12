@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useSignupMutation } from '../api/authApi'
 import { setCredentials } from '../slices/authSlice'
 import { useState } from 'react'
-import * as yup from 'yup'
+import { getSignupValidationSchema } from '../schemas/signupSchema'
 
 const Signup = () => {
   const { t } = useTranslation()
@@ -14,21 +14,7 @@ const Signup = () => {
   const [signup, { isLoading }] = useSignupMutation()
   const [errorMessage, setErrorMessage] = useState('')
 
-  const getValidationSchema = () => yup.object().shape({
-    username: yup
-      .string()
-      .required(t('signup.errors.required'))
-      .min(3, t('signup.errors.usernameLength'))
-      .max(20, t('signup.errors.usernameLength')),
-    password: yup
-      .string()
-      .required(t('signup.errors.required'))
-      .min(6, t('signup.errors.passwordLength')),
-    confirmPassword: yup
-      .string()
-      .required(t('signup.errors.required'))
-      .oneOf([yup.ref('password'), null], t('signup.errors.passwordMismatch')),
-  })
+  const validationSchema = getSignupValidationSchema(t)
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
@@ -57,7 +43,7 @@ const Signup = () => {
         <h2 className="text-center mb-4">{t('signup.pageName')}</h2>
         <Formik
           initialValues={{ username: '', password: '', confirmPassword: '' }}
-          validationSchema={getValidationSchema}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
           {({ errors, touched, isSubmitting }) => (

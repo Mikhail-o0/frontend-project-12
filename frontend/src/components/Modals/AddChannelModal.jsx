@@ -25,9 +25,7 @@ const AddChannelModal = ({ show, onClose, onSelectChannel }) => {
 
   const handleSubmit = async (values, { setSubmitting, resetForm, setFieldError }) => {
     let name = censorText(values.name.trim())
-    console.log('Original name:', values.name)
-  console.log('Censored name:', name)
-  console.log('Name length:', name.length)
+    
     if (!name) {
       setFieldError('name', t('modals.add.errors.required'))
       return
