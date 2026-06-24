@@ -50,6 +50,9 @@ const Login = () => {
               )}
 
               <div className="mb-4">
+                <label htmlFor="username" className="form-label visually-hidden">
+                  {t('login.username')}
+                </label>
                 <Field
                   type="text"
                   id="username"
@@ -64,6 +67,9 @@ const Login = () => {
               </div>
 
               <div className="mb-4">
+                <label htmlFor="password" className="form-label visually-hidden">
+                  {t('login.password')}
+                </label>
                 <Field
                   type="password"
                   id="password"

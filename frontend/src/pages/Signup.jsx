@@ -55,6 +55,9 @@ const Signup = () => {
               )}
 
               <div className="mb-4">
+                <label htmlFor="username" className="form-label visually-hidden">
+                  {t('signup.username')}
+                </label>
                 <Field
                   type="text"
                   id="username"
@@ -71,6 +74,9 @@ const Signup = () => {
               </div>
 
               <div className="mb-4">
+                <label htmlFor="password" className="form-label visually-hidden">
+                  {t('signup.password')}
+                </label>
                 <Field
                   type="password"
                   id="password"
@@ -86,6 +92,9 @@ const Signup = () => {
               </div>
 
               <div className="mb-4">
+                <label htmlFor="confirmPassword" className="form-label visually-hidden">
+                  {t('signup.confirmPassword')}
+                </label>
                 <Field
                   type="password"
                   id="confirmPassword"
@@ -102,7 +111,7 @@ const Signup = () => {
 
               <button 
                 type="submit" 
-                className="btn btn-outline-primary w-100 mb-3"
+                className="btn btn-outline-primary w-100 mb-4"
                 disabled={isLoading || isSubmitting}
               >
                 {isLoading || isSubmitting ? t('signup.submitting') : t('signup.submit')}
