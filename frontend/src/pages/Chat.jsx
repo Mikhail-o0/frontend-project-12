@@ -42,31 +42,35 @@ const Chat = () => {
 
   if (!channels || !activeChannelId) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: 'calc(100vh - 56px)' }}>
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
         {t('chat.loading')}
       </div>
     )
   }
 
   return (
-    <div className="container-fluid d-flex flex-column" style={{ height: 'calc(100vh - 56px)' }}>
-      <div className="row flex-grow-1">
-        <div className="col-md-3 col-lg-2 border-end p-0">
-          <Channels 
-            channels={channels}
-            activeChannelId={activeChannelId}
-            onSelectChannel={setActiveChannelId}
-            onAddChannel={() => setShowAddModal(true)}
-            onRenameChannel={handleRenameChannel}
-            onDeleteChannel={handleDeleteChannel}
-            error={channelsError}
-          />
+    <div className="container-fluid d-flex flex-column" style={{ height: '100vh', overflow: 'hidden' }}>
+      <div className="row flex-grow-1" style={{ minHeight: 0, overflow: 'hidden' }}>
+        <div className="col-md-3 col-lg-2 border-end p-0 d-flex flex-column" style={{ overflow: 'hidden' }}>
+          <div style={{ flex: '1 1 0', minHeight: 0, overflow: 'hidden' }}>
+            <Channels 
+              channels={channels}
+              activeChannelId={activeChannelId}
+              onSelectChannel={setActiveChannelId}
+              onAddChannel={() => setShowAddModal(true)}
+              onRenameChannel={handleRenameChannel}
+              onDeleteChannel={handleDeleteChannel}
+              error={channelsError}
+            />
+          </div>
         </div>
-        <div className="col-md-9 col-lg-10 p-0">
-          <Messages 
-            channelId={activeChannelId}
-            channelName={activeChannel?.name || ''}
-          />
+        <div className="col-md-9 col-lg-10 p-0 d-flex flex-column" style={{ overflow: 'hidden' }}>
+          <div style={{ flex: '1 1 0', minHeight: 0, overflow: 'hidden' }}>
+            <Messages 
+              channelId={activeChannelId}
+              channelName={activeChannel?.name || ''}
+            />
+          </div>
         </div>
       </div>
 
@@ -98,4 +102,5 @@ const Chat = () => {
     </div>
   )
 }
+
 export default Chat

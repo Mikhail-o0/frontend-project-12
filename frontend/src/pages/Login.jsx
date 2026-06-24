@@ -36,7 +36,7 @@ const Login = () => {
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
       <div className="card p-4" style={{ width: '400px' }}>
-        <h2 className="text-center mb-4">{t('login.pageName')}</h2>
+        <h2 className="auth-title">{t('login.pageName')}</h2>
         <Formik
           initialValues={{ username: '', password: '' }}
           onSubmit={handleSubmit}
@@ -49,31 +49,28 @@ const Login = () => {
                 </div>
               )}
 
-              <div className="mb-3">
-                <label htmlFor="username" className="form-label">
-                  {t('login.username')}
-                </label>
+              <div className="mb-4">
                 <Field
                   type="text"
                   id="username"
                   name="username"
                   className="form-control"
                   placeholder={t('login.username')}
+                  autoComplete="off"
+                  autoFocus
                   required
                   disabled={isLoading || isSubmitting}
                 />
               </div>
 
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">
-                  {t('login.password')}
-                </label>
+              <div className="mb-4">
                 <Field
                   type="password"
                   id="password"
                   name="password"
                   className="form-control"
                   placeholder={t('login.password')}
+                  autoComplete="new-password"
                   required
                   disabled={isLoading || isSubmitting}
                 />
@@ -81,15 +78,15 @@ const Login = () => {
 
               <button 
                 type="submit" 
-                className="btn btn-primary w-100 mb-3"
+                className="btn btn-outline-primary w-100 mb-3"
                 disabled={isLoading || isSubmitting}
               >
                 {t('login.submit')}
               </button>
 
               <div className="text-center">
-                <span className="text-muted">{t('login.noAccount')} </span>
-                <Link to="/signup">{t('login.signupLink')}</Link>
+                <span className="text-dark fw-semibold">{t('login.noAccount')} </span>
+                <Link to="/signup" className="btn btn-outline-primary w-100">{t('login.signupLink')}</Link>
               </div>
             </Form>
           )}

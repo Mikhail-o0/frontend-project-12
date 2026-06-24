@@ -40,7 +40,7 @@ const Signup = () => {
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
       <div className="card p-4" style={{ width: '400px' }}>
-        <h2 className="text-center mb-4">{t('signup.pageName')}</h2>
+        <h2 className="auth-title">{t('signup.pageName')}</h2>
         <Formik
           initialValues={{ username: '', password: '', confirmPassword: '' }}
           validationSchema={validationSchema}
@@ -54,16 +54,15 @@ const Signup = () => {
                 </div>
               )}
 
-              <div className="mb-3">
-                <label htmlFor="username" className="form-label">
-                  {t('signup.username')}
-                </label>
+              <div className="mb-4">
                 <Field
                   type="text"
                   id="username"
                   name="username"
                   className={`form-control ${errors.username && touched.username ? 'is-invalid' : ''}`}
                   placeholder={t('signup.username')}
+                  autoComplete="off"
+                  autoFocus
                   disabled={isLoading || isSubmitting}
                 />
                 {errors.username && touched.username && (
@@ -71,16 +70,14 @@ const Signup = () => {
                 )}
               </div>
 
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">
-                  {t('signup.password')}
-                </label>
+              <div className="mb-4">
                 <Field
                   type="password"
                   id="password"
                   name="password"
                   className={`form-control ${errors.password && touched.password ? 'is-invalid' : ''}`}
                   placeholder={t('signup.password')}
+                  autoComplete="new-password"
                   disabled={isLoading || isSubmitting}
                 />
                 {errors.password && touched.password && (
@@ -88,16 +85,14 @@ const Signup = () => {
                 )}
               </div>
 
-              <div className="mb-3">
-                <label htmlFor="confirmPassword" className="form-label">
-                  {t('signup.confirmPassword')}
-                </label>
+              <div className="mb-4">
                 <Field
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
                   className={`form-control ${errors.confirmPassword && touched.confirmPassword ? 'is-invalid' : ''}`}
                   placeholder={t('signup.confirmPassword')}
+                  autoComplete="new-password"
                   disabled={isLoading || isSubmitting}
                 />
                 {errors.confirmPassword && touched.confirmPassword && (
@@ -107,15 +102,15 @@ const Signup = () => {
 
               <button 
                 type="submit" 
-                className="btn btn-primary w-100 mb-3"
+                className="btn btn-outline-primary w-100 mb-3"
                 disabled={isLoading || isSubmitting}
               >
                 {isLoading || isSubmitting ? t('signup.submitting') : t('signup.submit')}
               </button>
 
               <div className="text-center">
-                <span className="text-muted">{t('signup.hasAccount')} </span>
-                <Link to="/login">{t('signup.loginLink')}</Link>
+                <span className="text-dark fw-semibold">{t('signup.hasAccount')} </span>
+                <Link to="/login" className="btn btn-outline-primary w-100">{t('signup.loginLink')}</Link>
               </div>
             </Form>
           )}

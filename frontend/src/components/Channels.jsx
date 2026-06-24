@@ -17,8 +17,8 @@ const Channels = ({
   }
 
   return (
-    <div className="d-flex flex-column h-100">
-      <div className="d-flex justify-content-between align-items-center p-3 border-bottom">
+    <div className="d-flex flex-column" style={{ height: '100%', overflow: 'hidden' }}>
+      <div className="d-flex justify-content-between align-items-center p-3 border-bottom" style={{ flexShrink: 0 }}>
         <h5 className="m-0">{t('chat.channels.title')}</h5>
         <button 
           type="button"
@@ -29,7 +29,7 @@ const Channels = ({
           +
         </button>
       </div>
-      <ul className="list-group list-group-flush flex-grow-1 overflow-auto">
+      <ul className="list-group list-group-flush flex-grow-1 overflow-auto" style={{ minHeight: 0 }}>
         {channels.map((channel) => (
           <li
             key={channel.id}

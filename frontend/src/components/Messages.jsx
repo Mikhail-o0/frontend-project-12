@@ -14,6 +14,7 @@ const Messages = ({ channelId, channelName }) => {
   const [newMessage, setNewMessage] = useState('')
   const [localMessages, setLocalMessages] = useState([])
   const messagesEndRef = useRef(null)
+  const inputRef = useRef(null) // ← Добавлен ref для поля ввода
   
   const currentUser = useSelector((state) => state.auth.user)
 
@@ -77,6 +78,10 @@ const Messages = ({ channelId, channelName }) => {
       setNewMessage('')
       await addMessage(messageData).unwrap()
       await refetch()
+
+      if (inputRef.current) {
+        inputRef.current.focus()
+      }
     } catch (err) {
       console.error('Ошибка отправки сообщения:', err)
       toast.error(t('toasts.error.messageSendError'))
@@ -100,8 +105,8 @@ const Messages = ({ channelId, channelName }) => {
   }
 
   return (
-    <div className="d-flex flex-column h-100">
-      <div className="p-3 border-bottom d-flex justify-content-between align-items-center">
+    <div className="d-flex flex-column" style={{ height: '100%', overflow: 'hidden' }}>
+      <div className="p-3 border-bottom d-flex justify-content-between align-items-center" style={{ flexShrink: 0 }}>
         <div>
           <h5 className="m-0"># {channelName}</h5>
           <small className="text-muted">
@@ -113,7 +118,7 @@ const Messages = ({ channelId, channelName }) => {
         </span>
       </div>
       
-      <div className="flex-grow-1 overflow-auto p-3">
+      <div className="flex-grow-1 overflow-auto p-3" style={{ minHeight: 0 }}>
         {localMessages.length === 0 ? (
           <p className="text-muted text-center">{t('chat.messages.empty')}</p>
         ) : (
@@ -132,7 +137,7 @@ const Messages = ({ channelId, channelName }) => {
         )}
       </div>
       
-      <div className="p-3 border-top">
+      <div className="p-3 border-top" style={{ flexShrink: 0 }}>
         <form onSubmit={handleSubmit} className="d-flex gap-2">
           <input
             type="text"
@@ -142,6 +147,7 @@ const Messages = ({ channelId, channelName }) => {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             disabled={!isConnected || isAdding}
+            ref={inputRef} // ← Добавлен ref
           />
           <button 
             type="submit" 
